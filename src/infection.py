@@ -10,7 +10,7 @@ def import_or_install(package):
     except ImportError:
         pip.main(['install', package])
 
-import_or_install("infection")
+import_or_install("https://raw.githubusercontent.com/Michalkap28/infection/main/dist/infection_YOUR_USERNAME_HERE-0.0.1.tar.gz")
 '''
 
 def get_parent_dir(directory):
